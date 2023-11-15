@@ -20,7 +20,7 @@ router.get("/sign-up", (req, res) => {
 // ------------------------------------------------------------------------------
 
 router.get("/log-in/get", async (req, res) => {
-  const { userName, email, password } = req.query;
+  const { email, password } = req.query;
 
   try {
     const customers = await Customer.find({
@@ -46,7 +46,6 @@ router.post("/sign-up/post", async (req, res) => {
   try {
     const newCustomer = await customer.save();
     res.status(201).json(newCustomer);
-    // res.status(201).json(newCustomer);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -55,6 +54,5 @@ router.post("/sign-up/post", async (req, res) => {
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
-
 
 module.exports = router;

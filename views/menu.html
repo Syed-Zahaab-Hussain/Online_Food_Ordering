@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vendor Menu</title>
+    <link rel="stylesheet" href="/styles/admin_style.css" />
+    <link rel="stylesheet" href="/styles/toggle_switch.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Vendor Menu</h1>
+
+      <form action="/admin/menuitems" method="POST" id="menuForm">
+        <label for="itemName">Item Name:</label>
+        <input type="text" id="itemName" name="itemName" />
+
+        <label for="itemPrice">Item Price:</label>
+        <input type="number" id="itemPrice" name="itemPrice" />
+
+        <label for="itemDescription">Item Description:</label>
+        <textarea id="itemDescription" name="itemDescription"></textarea>
+
+        <input type="hidden" id="vendorId" name="vendorId" value="" />
+
+        <button type="submit" id="submitButton">Add Item</button>
+      </form>
+
+      <div class="vendorList">
+        <h2>Menu List</h2>
+        <table id="menuTable">
+          <thead id="thead"></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="/scripts/menu_script.js"></script>
+  </body>
+</html>
+
+<!-- <div class="vendorList">
+        <h2>Menu List</h2>
+        <ul id="menuList"></ul>
+      </div> -->
