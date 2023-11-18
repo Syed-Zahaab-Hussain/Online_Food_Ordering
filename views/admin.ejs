@@ -8,7 +8,11 @@
   </head>
   <body>
     <div class="container">
-      <h1>Add New Vendor</h1>
+      <h1>Admin Portal</h1>
+
+      <h2>Admin Information</h2>
+
+      <h2>Add new Vendor</h2>
 
       <form action="/admin/vendor/create" method="POST">
         <label for="vendorName">Vendor Name:</label>
@@ -23,12 +27,27 @@
       <div class="vendorList">
         <h2>Menu List</h2>
         <table id="menuTable">
-          <thead id="thead"></thead>
-          <tbody id="tbody"></tbody>
+          <thead id="thead">
+            <tr>
+              <% tableHeader.forEach(heading => { %>
+              <th><%= heading %></th>
+              <% }); %>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <% fetchVendors.forEach(vendor => { %>
+            <tr>
+              <td>
+                <a href="<%= `admin/menu?vendorId=${vendor._id}` %>"
+                  ><%= vendor.vendorName %></a
+                >
+              </td>
+              <td><%= vendor.description %></td>
+            </tr>
+            <% }); %>
+          </tbody>
         </table>
       </div>
     </div>
-
-    <script src="scripts/vendor_script.js"></script>
   </body>
 </html>

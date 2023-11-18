@@ -9,7 +9,7 @@
   </head>
   <body>
     <div class="container">
-      <h1>Vendor Menu</h1>
+      <h1><%= `${fetchMenu[0].Vendor.vendorName} Menu` %></h1>
 
       <form action="/admin/menuitems" method="POST" id="menuForm">
         <label for="itemName">Item Name:</label>
@@ -29,17 +29,26 @@
       <div class="vendorList">
         <h2>Menu List</h2>
         <table id="menuTable">
-          <thead id="thead"></thead>
-          <tbody id="tbody"></tbody>
+          <thead id="thead">
+            <tr>
+              <% tableHeader.forEach(heading => { %>
+              <th><%= heading %></th>
+              <% }); %>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <% fetchMenu.forEach(menu => { %>
+            <tr>
+              <td><%= menu.itemName %></td>
+              <td><%= menu.itemDescription %></td>
+              <td><%= menu.itemPrice %></td>
+            </tr>
+            <% }); %>
+          </tbody>
         </table>
       </div>
     </div>
 
-    <script src="/scripts/menu_script.js"></script>
+    <script></script>
   </body>
 </html>
-
-<!-- <div class="vendorList">
-        <h2>Menu List</h2>
-        <ul id="menuList"></ul>
-      </div> -->

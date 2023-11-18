@@ -19,9 +19,8 @@ db.on("error", (error) => {
 });
 db.once("open", () => console.log("connected to database"));
 
-// app.set("view engine", "ejs");
+app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname + "/public")));
-// app.set("view engine", "ejs");
 
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------

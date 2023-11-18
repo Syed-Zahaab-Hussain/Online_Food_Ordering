@@ -1,19 +1,49 @@
 const express = require("express");
 const path = require("path");
 const router = express.Router();
+
+// Importing the MongoDB Models
 const Vendor = require("../models/vendor");
 const MenuItem = require("../models/menu");
 
-router.get("/", (req, res) => {
-  const menuPath = path.resolve(__dirname, "../views/admin.html");
-  res.sendFile(menuPath);
+// Importing the Script Files
+const fetchVendors = require("../public/scripts/vendor_script");
+const fetchMenu = require("../public/scripts/menu_script");
+
+router.get("/", async (req, res) => {
+  const adminPath = path.resolve(__dirname, "../views/admin.ejs");
+
+  try {
+    const vendors = await fetchVendors();
+
+    res.render(adminPath, {
+      fetchVendors: vendors[0],
+      tableHeader: vendors[1],
+    });
+  } catch (error) {
+    console.error("Error fetching vendors:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // ------------------------------------------------------------------------------
 
-router.get("/menu", (req, res) => {
-  const menuPath = path.resolve(__dirname, "../views/menu.html");
-  res.sendFile(menuPath);
+router.get("/menu", async (req, res) => {
+  const parameterValue = req.query.vendorId;
+  // console.log(parameterValue);
+
+  const menuPath = path.resolve(__dirname, "../views/menu.ejs");
+  try {
+    const menus = await fetchMenu(parameterValue);
+
+    res.render(menuPath, {
+      fetchMenu: menus[0],
+      tableHeader: menus[1],
+    });
+  } catch (error) {
+    console.error("Error fetching menu:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // ------------------------------------------------------------------------------

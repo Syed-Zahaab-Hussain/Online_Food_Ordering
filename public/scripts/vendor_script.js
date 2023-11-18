@@ -1,31 +1,25 @@
 const tableHeader = ["Name", "Description"];
 
-async function fetchAndDisplayVendors() {
-  const thead = document.getElementById("thead");
-  const tbody = document.getElementById("tbody");
+// async function DisplayAdminInformation() {
+//   try {
+//     const response = await fetch("/admin");
+//   } catch (error) {
+//     console.error("Error fetching Admin Information", error);
+//   }
+// }
 
+async function fetchVendors() {
   try {
-    const response = await fetch("/admin/vendor/retrieve");
+    // const response = await fetch("/admin/vendor/retrieve");
+    const response = await fetch("http://localhost:3000/admin/vendor/retrieve");
+
     const vendors = await response.json();
 
-    tableHeader.forEach((name) => {
-      const th = document.createElement("th");
-      th.textContent = `${name}`;
-      thead.appendChild(th);
-    });
-
-    vendors.forEach((vendor) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td> <a href='admin/menu?vendorId=${vendor._id}'>${vendor.vendorName}</a> </td>
-        <td>${vendor.description}</td>
-
-      `;
-      tbody.appendChild(tr);
-    });
+    return [vendors, tableHeader];
   } catch (error) {
     console.error("Error fetching vendors:", error);
+    throw error;
   }
 }
 
-window.onload = fetchAndDisplayVendors;
+module.exports = fetchVendors;
