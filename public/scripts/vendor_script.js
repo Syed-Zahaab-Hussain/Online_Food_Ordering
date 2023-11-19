@@ -10,8 +10,7 @@ const tableHeader = ["Name", "Description"];
 
 async function fetchVendors() {
   try {
-    // const response = await fetch("/admin/vendor/retrieve");
-    const response = await fetch("http://localhost:3000/admin/vendor/retrieve");
+    const response = await fetch("http://localhost:3000/admin/vendor/get");
 
     const vendors = await response.json();
 

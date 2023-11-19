@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="/styles/auth_style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="signup-page">
+      <% if(err) { %>
+      <p style="color: red"><%= err %></p>
+      <% } %>
+      <h1>Sign Up</h1>
+
+      <form
+        action="sign-up/post"
+        method="POST"
+        onsubmit="return validateForm()"
+      >
+        <label for="userName">User Name</label>
+        <input type="text" id="userName" name="userName" />
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" />
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" />
+
+        <label for="confirmPassword">confirm Password</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" />
+
+        <div style="display: none" id="not-match">
+          Password and confirm Password field do not match
+        </div>
+
+        <input type="hidden" name="role" , value="user" />
+        <button id="sign-up-btn">Sign-up</button>
+      </form>
+
+      <p class="para-2">
+        Already have an account? <a href="log-in">Login here</a>
+      </p>
+    </div>
+
+    <script>
+      function validateForm() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+
+        if (password !== confirmPassword) {
+          alert("Passwords do not match. Please check and try again.");
+          return false;
+        }
+        return true;
+      }
+    </script>
+  </body>
+</html>

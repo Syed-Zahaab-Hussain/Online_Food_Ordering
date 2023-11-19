@@ -9,9 +9,13 @@
   </head>
   <body>
     <div class="container">
+      <% if (fetchMenu && fetchMenu.length > 0) { %>
       <h1><%= `${fetchMenu[0].Vendor.vendorName} Menu` %></h1>
+      <% } else { %>
+      <h1>Vendor Menu</h1>
+      <% } %>
 
-      <form action="/admin/menuitems" method="POST" id="menuForm">
+      <form action="/admin/menu/post" method="POST" id="menuForm">
         <label for="itemName">Item Name:</label>
         <input type="text" id="itemName" name="itemName" />
 
@@ -26,8 +30,9 @@
         <button type="submit" id="submitButton">Add Item</button>
       </form>
 
-      <div class="vendorList">
+      <div class="MenuList">
         <h2>Menu List</h2>
+        <% if (fetchMenu && fetchMenu.length > 0) {%>
         <table id="menuTable">
           <thead id="thead">
             <tr>
@@ -46,9 +51,21 @@
             <% }); %>
           </tbody>
         </table>
+        <% } else { %>
+        <table>
+          <tr>
+            <td colspan="3">No menu items available</td>
+          </tr>
+        </table>
+        <% } %>
       </div>
     </div>
 
-    <script></script>
+    <script>
+      const parameterValue = new URLSearchParams(window.location.search).get(
+        "vendorId"
+      );
+      document.getElementById("vendorId").value = parameterValue;
+    </script>
   </body>
 </html>

@@ -1,6 +1,4 @@
-const express = require("express");
 const path = require("path");
-const router = express.Router();
 
 // Importing the MongoDB Models
 const Vendor = require("../models/vendor");
@@ -10,7 +8,11 @@ const MenuItem = require("../models/menu");
 const fetchVendors = require("../public/scripts/vendor_script");
 const fetchMenu = require("../public/scripts/menu_script");
 
-router.get("/", async (req, res) => {
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------
+
+exports.admin_get = async (req, res) => {
   const adminPath = path.resolve(__dirname, "../views/admin.ejs");
 
   try {
@@ -24,11 +26,11 @@ router.get("/", async (req, res) => {
     console.error("Error fetching vendors:", error);
     res.status(500).send("Internal Server Error");
   }
-});
+};
 
 // ------------------------------------------------------------------------------
 
-router.get("/menu", async (req, res) => {
+exports.menu_get = async (req, res) => {
   const parameterValue = req.query.vendorId;
   // console.log(parameterValue);
 
@@ -44,13 +46,13 @@ router.get("/menu", async (req, res) => {
     console.error("Error fetching menu:", error);
     res.status(500).send("Internal Server Error");
   }
-});
+};
 
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 
-router.post("/vendor/create", async (req, res) => {
+exports.vendor_create = async (req, res) => {
   const vendor = new Vendor({
     vendorName: req.body.vendorName,
     description: req.body.description,
@@ -62,23 +64,35 @@ router.post("/vendor/create", async (req, res) => {
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
-});
+};
 
 // ------------------------------------------------------------------------------
-
-router.get("/vendor/retrieve", async (req, res) => {
+// Route to get all vendors
+exports.vendor_get = async (req, res) => {
   try {
     const vendors = await Vendor.find();
     res.status(200).json(vendors);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
+
+// ------------------------------------------------------------------------------
+// Route to get a single vendors
+exports.vendor_get_single = async (req, res) => {
+  const vendorId = req.params.vendorId;
+  try {
+    const vendors = await Vendor.find({ _id: vendorId });
+    res.status(200).json(vendors);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // ------------------------------------------------------------------------------
 
 // Route to insert a new menu item
-router.post("/menuitems", async (req, res) => {
+exports.menu_post = async (req, res) => {
   const { itemName, itemDescription, itemPrice, vendorId } = req.body;
   // const vendorId = req.params.vendorId;
   console.log(vendorId);
@@ -106,12 +120,12 @@ router.post("/menuitems", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
 // ------------------------------------------------------------------------------
 
 // Route to get menu items for a specific vendor
-router.get("/vendor/:vendorId/menuitems", async (req, res) => {
+exports.menu_get_single_vendor = async (req, res) => {
   try {
     const vendorId = req.params.vendorId;
     const menuItems = await MenuItem.find({ Vendor: vendorId }).populate(
@@ -121,13 +135,12 @@ router.get("/vendor/:vendorId/menuitems", async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-});
+};
 
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------
 
-module.exports = router;
 
 // // Route to get all menu items
 // router.get("/menuitems", async (req, res) => {
