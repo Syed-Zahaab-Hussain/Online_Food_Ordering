@@ -1,0 +1,196 @@
+*,
+*::after,
+*::before {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  width: fit-content;
+}
+
+/* Home Section */
+#home {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100vh;
+  padding: 0;
+  color: #fff;
+}
+
+#home::before {
+  content: "";
+  /* background: url('bac.jpg') no-repeat center center/cover; */
+  background: linear-gradient(rgba(4, 9, 30, 0.6), rgba(4, 9, 30, 0.6)),
+    url("/images/bac.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+}
+
+#home h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+/* 
+.searchbar {
+  position: relative;
+}
+
+#home .searchbar input {
+  width: 400px;
+  border: 3px solid transparent;
+  padding: 6px;
+  border-radius: 30px;
+  margin-top: 20px;
+}
+
+.searchbar img {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+} */
+
+.menu-btn {
+  width: 9em;
+  height: 4em;
+  display: inline-block;
+  padding: 0.5em 1.5em;
+  text-decoration: none;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 1em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #fff;
+  background: #16a083;
+}
+
+.menu-btn:hover {
+  background: #117964;
+  transition: background 0.3s ease-in-out;
+}
+
+/* Service Section */
+.service {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50px;
+}
+
+.service h1 {
+  font-size: 3em;
+  margin-bottom: 20px;
+}
+
+.main {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.box {
+  flex: 1;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.box h5 {
+  font-size: 30px;
+}
+.box img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Popular Section */
+#popular {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50px;
+}
+
+#popular h1 {
+  font-size: 2em;
+  margin-bottom: 15px;
+}
+
+.row1,
+.row2,
+.row3 {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.img1 {
+  max-width: 200px;
+  height: auto;
+  margin: 5px;
+}
+
+/* About Section */
+#about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50 0;
+}
+
+.about {
+  background: linear-gradient(rgba(4, 9, 30, 0.5), rgba(4, 9, 30, 0.5)),
+    url("/images/bac-img2.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 400px;
+  width: 100%;
+  z-index: -1;
+}
+
+.about h1 {
+  padding-top: 150px;
+  color: #fff;
+  font-size: 3em;
+  margin-bottom: 25px;
+}
+
+#about h4 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+/* Footer Section */
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  margin-top: 10px;
+  background-color: black;
+  color: #fff;
+  width: 100%;
+}

@@ -4,54 +4,177 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vendors</title>
-    <link rel="stylesheet" href="styles/admin_style.css" />
+    <link rel="stylesheet" href="/styles/navigation_style.css" />
+    <link rel="stylesheet" href="/styles/form_style.css" />
+    <link rel="stylesheet" href="/styles/admin_style.css" />
+
+    <link rel="icon" type="image/x-icon" href="/images/logo1.png" />
   </head>
+
   <body>
+    <nav id="navbar">
+      <div id="logo">
+        <a href="/"> <img src="/images/logo1.png" alt="Logo" /></a>
+      </div>
+      <div class="nav-btn">&#9776;</div>
+      <ul>
+        <li><a href="/">Home</a></li>
+
+        <% if (isAuth) { %>
+        <div class="dropdown">
+          <li class="dropbtn"><a>Welcome, <%= user.userName %></a></li>
+          <div class="dropdown-content">
+            <% if(user.role==='admin' ) {%>
+            <li><a href="/admin">Admin</a></li>
+            <li><a href="/admin/orders">Orders</a></li>
+
+            <% } %>
+
+            <form action="/admin/logout" method="POST">
+              <button class="log-out">Logout</button>
+            </form>
+          </div>
+        </div>
+        <li><a href="/cart">Cart</a></li>
+        <% } else { %>
+        <li><a href="/sign-up">Sign up</a></li>
+        <li><a href="/log-in">Log in</a></li>
+        <% } %>
+      </ul>
+    </nav>
+
     <div class="container">
       <h1>Admin Portal</h1>
 
       <h2>Admin Information</h2>
+      <p><%= `Name: ${user.userName} `%></p>
+      <p><%= `Email: ${user.email} `%></p>
 
+      <hr />
       <h2>Add new Vendor</h2>
+      <div class="form-wrap">
+        <form
+          action="/admin/vendor/create"
+          method="POST"
+          enctype="multipart/form-data"
+          class="form"
+        >
+          <p>
+            <input
+              type="text"
+              id="vendorName"
+              name="vendorName"
+              placeholder="Vendor Name"
+              required
+            />
 
-      <form action="/admin/vendor/create" method="POST">
-        <label for="vendorName">Vendor Name:</label>
-        <input type="text" id="vendorName" name="vendorName" />
+            <textarea
+              id="description"
+              name="description"
+              rows="4"
+              cols="50"
+              placeholder="Description" required
+            ></textarea>
+          </p>
 
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea>
+          <label for="itemImage"
+            >Vendor Image (size: 1MB, maxWidth: 800, maxHeight: 600):</label
+          >
+          <input
+            type="file"
+            id="itemImage"
+            name="itemImage"
+            accept="image/*"
+            required
+            onchange="validateImage(this)"
+            size="50"
+          />
 
-        <button type="submit">Add Vendor</button>
-      </form>
+          <input type="submit" id="submit" value="Add Vendor" />
+        </form>
+      </div>
 
+      <hr>
       <div class="vendorList">
-        <h2>Menu List</h2>
+        <h2>Menu List</h2>  
         <table id="menuTable">
           <thead id="thead">
             <tr>
-              <% tableHeader.forEach(heading => { %>
+              <th></th>
+              <% tableHeader.forEach(heading=> { %>
               <th><%= heading %></th>
               <% }); %>
             </tr>
           </thead>
           <tbody id="tbody">
-            <% fetchVendors.forEach(vendor => { %>
+            <% fetchVendors.forEach(vendor=> { %>
             <tr>
               <td>
-                <a href="<%= `admin/menu?vendorId=${vendor._id}` %>"
-                  ><%= vendor.vendorName %></a
-                >
+                <img
+                  src="<%= `/uploads/${vendor.vendorImage}` %>"
+                  alt="<%= vendor.vendorName %>"
+                  width="100"
+                />
+              </td>
+              <td>
+                <a href="<%= `admin/menu?vendorId=${vendor._id}` %>">
+                  <%= vendor.vendorName %>
+                </a>
               </td>
               <td><%= vendor.description %></td>
+              <td>
+                <button class="delete-btn" data-vendor-id="<%= vendor._id %>">
+                  Delete
+                </button>
+              </td>
             </tr>
             <% }); %>
           </tbody>
         </table>
       </div>
-
-      <form action="/admin/logout" method="POST">
-        <button>Logout</button>
-      </form>
     </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const navBtn = document.querySelector(".nav-btn");
+        const navList = document.querySelector("#navbar ul");
+
+        navBtn.addEventListener("click", function () {
+          navList.classList.toggle("show");
+        });
+
+        var deleteButtons = document.querySelectorAll(".delete-btn");
+
+        deleteButtons.forEach(function (button) {
+          button.addEventListener("click", function () {
+            var vendorId = this.getAttribute("data-vendor-id");
+            deleteVendor(vendorId);
+          });
+        });
+
+        function deleteVendor(vendorId) {
+          fetch("/admin/vendor/delete", {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ vendorId: vendorId }),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Delete successful:", data);
+              location.reload(); // Reload the page after successful deletion
+            })
+            .catch((error) => {
+              console.error("Error deleting vendor:", error);
+            });
+        }
+      });
+    </script>
   </body>
 </html>

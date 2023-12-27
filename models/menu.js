@@ -15,6 +15,9 @@ const menuItemSchema = new mongoose.Schema({
     ref: "Vendor",
     required: true,
   },
+  itemImage: {
+    type: String, // Store the file path in the database
+  },
   isActive: {
     type: Boolean,
     default: true,

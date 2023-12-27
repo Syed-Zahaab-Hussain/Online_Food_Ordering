@@ -1,4 +1,4 @@
-const tableHeader = ["Name", "Description", "Price"];
+const tableHeader = ["Name", "Description", "Price", "Active", "Delete"];
 
 async function fetchMenu(parameterValue) {
   try {

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Cart</title>
+    <link rel="stylesheet" href="styles/navigation_style.css" />
+    <link rel="stylesheet" href="/styles/user_style.css" />
+    <link rel="icon" type="image/x-icon" href="/images/logo1.png" />
+  </head>
+
+  <body>
+    <nav id="navbar">
+      <div id="logo">
+        <a href="/"> <img src="/images/logo1.png" alt="Logo" /></a>
+      </div>
+      <div class="nav-btn">&#9776;</div>
+      1
+      <ul>
+        <li><a href="/">Home</a></li>
+
+        <% if (isAuth) { %>
+        <div class="dropdown">
+          <li class="dropbtn"><a>Welcome, <%= user.userName %></a></li>
+          <div class="dropdown-content">
+            <% if(user.role==='admin' ) {%>
+            <li><a href="/admin">Admin</a></li>
+            <% } %>
+
+            <form action="/admin/logout" method="POST">
+              <button class="log-out">Logout</button>
+            </form>
+          </div>
+        </div>
+
+        <li><a href="/cart">Cart</a></li>
+        <% } else { %>
+        <li><a href="/sign-up">Sign up</a></li>
+        <li><a href="/log-in">Log in</a></li>
+        <% } %>
+      </ul>
+    </nav>
+    <main id="container">
+      <h1 class="food-menu-heading">Food Cart</h1>
+      <div class="food-menu-container">
+        <% if (cartItems.length> 0) { %> <% cartItems.forEach(item=> { %>
+
+        <div class="food-menu-item">
+          <div class="food-img">
+            <img
+              src="<%= `/uploads/${item.itemId.itemImage}` %>"
+              alt="<%= item.itemName %>"
+            />
+          </div>
+          <div class="food-description">
+            <h2 class="food-titile"><%= item.itemId.itemName %></h2>
+
+            <p class="food-price"><%= `Price: $${item.itemId.itemPrice}` %></p>
+            <p>
+              <strong>Quantity:</strong>
+              <%= item.quantity %>
+            </p>
+            <p><strong>Price:</strong> $<%= item.itemId.itemPrice %></p>
+
+            <form action="/cart/delete" method="POST">
+              <input
+                type="hidden"
+                name="itemId"
+                value="<%= item.itemId._id %>"
+              />
+              <button type="submit" class="delete-btn">Delete</button>
+            </form>
+          </div>
+        </div>
+
+        <% }); %> <% } else { %>
+        <p class="else-text">Your cart is empty.</p>
+        <% } %>
+      </div>
+
+      <% if (cartItems.length> 0) { %>
+      <div class="total-amount-container">
+        <div
+          style="display: none"
+          id="temp"
+          data-cart-items="<%= JSON.stringify(cartItems) %>"
+        ></div>
+        <p><strong>Total Amount:</strong> $<span id="totalAmount"></span></p>
+        <form action="order/create" method="POST">
+          <input
+            type="hidden"
+            name="cartItems"
+            value="<%= JSON.stringify(cartItems) %>"
+          />
+          <button type="submit" class="purchase-btn">Purchase</button>
+        </form>
+      </div>
+      <% } %>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const navBtn = document.querySelector(".nav-btn");
+        const navList = document.querySelector("#navbar ul");
+
+        navBtn.addEventListener("click", function () {
+          navList.classList.toggle("show");
+        });
+
+        const cartItemsJSON = document
+          .getElementById("temp")
+          .getAttribute("data-cart-items");
+        const cartItems = JSON.parse(cartItemsJSON);
+
+        console.log(cartItems);
+
+        // Calculate and display total amount
+        var totalAmount = calculateTotalAmount(cartItems);
+        document.getElementById("totalAmount").textContent =
+          totalAmount.toFixed(2);
+
+        function calculateTotalAmount(cartItems) {
+          return cartItems.reduce((total, item) => {
+            return total + item.itemId.itemPrice * item.quantity;
+          }, 0);
+        }
+      });
+    </script>
+  </body>
+</html>

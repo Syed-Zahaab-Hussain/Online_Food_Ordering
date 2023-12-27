@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Menu</title>
+    <link rel="stylesheet" href="/styles/navigation_style.css" />
+    <link rel="stylesheet" href="/styles/user_style.css" />
+    <link rel="icon" type="image/x-icon" href="/images/logo1.png" />
+  </head>
+
+  <body>
+    <nav id="navbar">
+      <div id="logo">
+        <a href="/"> <img src="/images/logo1.png" alt="Logo" /></a>
+      </div>
+      <div class="nav-btn">&#9776;</div>
+      <ul>
+        <li><a href="/">Home</a></li>
+
+        <% if (isAuth) { %>
+        <div class="dropdown">
+          <li class="dropbtn"><a>Welcome, <%= user.userName %></a></li>
+          <div class="dropdown-content">
+            <% if(user.role==='admin' ) {%>
+            <li><a href="/admin">Admin</a></li>
+            <% } %>
+
+            <form action="/admin/logout" method="POST">
+              <button class="log-out">Logout</button>
+            </form>
+          </div>
+        </div>
+        <li><a href="/cart">Cart</a></li>
+        <% } else { %>
+        <li><a href="/sign-up">Sign up</a></li>
+        <li><a href="/log-in">Log in</a></li>
+        <% } %>
+      </ul>
+    </nav>
+    <main id="container">
+      <h1 class="food-menu-heading">Food Menu</h1>
+      <div class="food-menu-container">
+        <% if (fetchMenu.length> 0) { %> <% fetchMenu.forEach(item=> { %> <%
+        if(item.isActive===true) { %>
+        <div class="food-menu-item">
+          <div class="food-img">
+            <img
+              src="<%= `/uploads/${item.itemImage}` %>"
+              alt="<%= item.itemName %>"
+            />
+          </div>
+          <div class="food-description">
+            <h2 class="food-titile"><%= item.itemName %></h2>
+            <p><%= item.itemDescription%></p>
+            <p class="food-price"><%= `Price: $${item.itemPrice}` %></p>
+
+            <div class="quantity-input">
+              Quantity:
+              <input
+                type="number"
+                id="quantity_<%= item._id %>"
+                name="quantity"
+                min="1"
+                max="10"
+              />
+            </div>
+
+            <br />
+            <button
+              class="add-to-cart"
+              type="button"
+              onclick="addToCart('<%= item._id %>')"
+            >
+              ADD TO CART
+            </button>
+          </div>
+        </div>
+        <% } %> <% }); %> <% } else { %>
+        <p class="else-text">There is no item in menu.</p>
+        <% } %>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const navBtn = document.querySelector(".nav-btn");
+        const navList = document.querySelector("#navbar ul");
+
+        navBtn.addEventListener("click", function () {
+          navList.classList.toggle("show");
+        });
+      });
+      function addToCart(itemId) {
+        const quantity = document.getElementById(`quantity_${itemId}`).value;
+
+        // Validate quantity (you may want to add more validation)
+        if (!quantity || isNaN(quantity) || quantity <= 0) {
+          alert("Please enter a valid quantity.");
+          return;
+        }
+
+        fetch("/menu/cart/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            itemId: itemId,
+            quantity: parseInt(quantity),
+          }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              alert("Item added to cart successfully.");
+            } else {
+              alert("Login First");
+            }
+          })
+          .catch((error) => {
+            console.error("Error adding item to cart:", error);
+            alert("An error occurred while adding the item to the cart.");
+          });
+      }
+    </script>
+  </body>
+</html>
