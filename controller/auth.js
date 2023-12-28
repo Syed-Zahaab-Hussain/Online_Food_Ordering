@@ -89,7 +89,7 @@ exports.log_in_verify = async (req, res) => {
 // ------------------------------------------------------------------------------
 
 exports.sign_up_create = async (req, res) => {
-  const { userName, email, password, role } = req.body;
+  const { userName, email, password, role, delivery_address } = req.body;
 
   let user = await User.findOne({ email });
 
@@ -103,6 +103,7 @@ exports.sign_up_create = async (req, res) => {
     email,
     password,
     role,
+    delivery_address,
   });
 
   try {

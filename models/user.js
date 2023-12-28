@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "user"],
     required: true,
   },
+  delivery_address: {
+    type: String,
+    required: true,
+  },
 });
 
 const user = mongoose.model("User", userSchema);
